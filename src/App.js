@@ -1,25 +1,45 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import NumberInput from './NumberInput';
+import Button from './Button';
+import Result from './Result';
 
 function App() {
+  const [luckyNumber, setLuckyNumber] = useState(Math.floor(Math.random() * 100) + 1);
+  const [guess, setGuess] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleGuess = () => {
+    const guessInt = parseInt(guess);
+    if (guessInt === luckyNumber) {
+      setMessage(`Congratulations! You guessed the right number in ${attempts} attempts.`);
+    } else if (guessInt < luckyNumber) {
+      setMessage(`You guessed a smaller number.`);
+    } else {
+      setMessage(`You guessed a bigger number.`);
+    }
+    setGuess('');
+  };
+
+  const handleReset = () => {
+    setLuckyNumber(Math.floor(Math.random() * 100) + 1);
+    setMessage('');
+  };
+
+  const handleChange = (event) => {
+    setGuess(event.target.value);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Lucky Number Guessing Game</h1>
+      <NumberInput value={guess} onChange={handleChange} />
+      <Button label="Guess" onClick={handleGuess} />
+      <Button label="Reset" onClick={handleReset} />
+      <Result message={message} />
     </div>
   );
 }
 
 export default App;
+
